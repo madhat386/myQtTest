@@ -1,5 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
+#include <QMessageBox>
 
 Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
     ui->setupUi(this);
@@ -30,6 +31,31 @@ Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
         table->setItem(i, col, new QTableWidgetItem(QString::number(10 + i)));
     }
 
+    //点击按钮添加赵云
+    connect(ui->btnAdd, &QPushButton::clicked, [ = ]() {
+        //先判断有没赵云，有就不添加，没有采取添加
+        QList<QTableWidgetItem*> reslist = ui->tableWidget->findItems("赵云", Qt::MatchStartsWith);
+        if(reslist.empty()) {
+            //添加赵云
+            table->insertRow(0);
+            table->setItem(0, 0, new QTableWidgetItem("赵云"));
+            table->setItem(0, 1, new QTableWidgetItem("男"));
+            table->setItem(0, 2, new QTableWidgetItem(QString::number(18)));
+        } else {
+            QMessageBox::warning(this, "警告", "这个武将已经添加过了,请勿重复添加");
+        }
+    });
+
+    connect(ui->btnDelete, &QPushButton::clicked, [ = ]() {
+        QList<QTableWidgetItem*> reslist = table->findItems("赵云", Qt::MatchStartsWith);
+        if(!reslist.empty()) {
+            //删除赵云
+            //找到赵云所在的行
+            QList<QTableWidgetItem*> reslist = table->findItems("赵云", Qt::MatchStartsWith);
+            //删除行
+            table->removeRow(reslist.first()->row());
+        }
+    });
 
 
 }
