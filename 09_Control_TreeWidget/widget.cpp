@@ -3,6 +3,7 @@
 
 Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
     ui->setupUi(this);
+    this->setFixedSize(600, 400);
 
     //treeWidget的使用
     //添加头
