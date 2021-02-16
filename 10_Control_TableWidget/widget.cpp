@@ -22,14 +22,12 @@ Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
     nameList << "亚瑟" << "张三" << "李四" << "王五" << "赵六";
     QStringList genderList;
     genderList << "男" << "女" << "男" << "女" << "男";
-    QStringList ageList = QStringList() << "12" << "13" << "14" << "15" << "16";
-
 
     for (int i = 0; i < 5; ++i) {
         int col = 0;
         table->setItem(i, col++, new QTableWidgetItem(nameList[i]));
         table->setItem(i, col++, new QTableWidgetItem(genderList[i]));
-        table->setItem(i, col, new QTableWidgetItem(ageList.at(i)));
+        table->setItem(i, col, new QTableWidgetItem(QString::number(10 + i)));
     }
 
 
