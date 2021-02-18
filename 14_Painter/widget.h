@@ -18,6 +18,7 @@ public:
 
 private:
     Ui::Widget* ui;
+    int posX;
 };
 
 #endif // WIDGET_H

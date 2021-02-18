@@ -5,7 +5,14 @@
 
 Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
     ui->setupUi(this);
+    this->posX = 10;
 
+    connect(ui->pushButton, &QPushButton::clicked, [ = ]() {
+        //让成员属性posX的值增加，以便手动触发绘图事件的时候可以改变绘制图片的位置
+        posX += 10;
+        //手动调用从新绘图的事件
+        this->update();
+    });
 
 
 }
@@ -18,6 +25,36 @@ Widget::~Widget() {
 void Widget::paintEvent(QPaintEvent*) {
     //创建画家
     QPainter painter(this);//this代表绘图设备（一张纸）
+
+    //高级设置
+    painter.drawEllipse(QPoint(100, 100), 50, 50);
+    //设置抗锯齿能力(影响性能)
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.drawEllipse(QPoint(200, 100), 50, 50);
+
+    painter.drawRect(QRect(20, 20, 50, 50));
+    //移动画家
+    painter.translate(QPoint(100, 0));
+    //保存画家状态
+    painter.save();
+    painter.translate(QPoint(200, 200));
+    //还原画家状态(还原到之前保存的状态)
+    painter.restore();
+    painter.drawRect(QRect(100, 20, 50, 50));
+
+    //画一个图片
+    //如果出屏幕，强制变回10
+    if(posX > this->width()) {
+        posX = 10;
+    }
+    //先往回移动一点距离调整下初始位置
+    painter.translate(QPoint(-100, 0));
+    painter.drawPixmap(posX, 10, 200, 200, QPixmap(":images/img.jpg"));
+
+
+
+    /*
+
     //设置画笔颜色
     QPen pen(QColor(255, 0, 0));
     //设置笔宽
@@ -40,5 +77,8 @@ void Widget::paintEvent(QPaintEvent*) {
     painter.drawRect(QRect(QPoint(100, 100), QPoint(200, 200)));
     //画字体
     painter.drawText(QRect(10, 250, 200, 50), "万事皆虚，一切皆允");
+
+    */
+
 
 }
