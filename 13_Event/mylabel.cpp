@@ -19,12 +19,19 @@ void MyLabel::leaveEvent(QEvent* event) {
 }
 
 void MyLabel::mouseMoveEvent(QMouseEvent* event) {
-    qDebug() << "鼠标移动了（按下状态）";
+    //只让移动事件在左键按下的时候触发
+    if(event->buttons() & Qt::LeftButton) {
+        QString str = QString("鼠标移动了（按下左键）,x=%1,y=%2").arg(event->x()).arg(event->y());
+        qDebug() << str;
+    }
 }
 
 void MyLabel::mousePressEvent(QMouseEvent* event) {
-    QString str = QString("鼠标按下了,x=%1,y=%2").arg(event->x()).arg(event->y());
-    qDebug() << str;
+    if(event->button() == Qt::LeftButton) {
+        qDebug() << "鼠标按下了左键";
+    } else if(event->button() == Qt::RightButton) {
+        qDebug() << "鼠标按下了右键";
+    }
 }
 
 void MyLabel::mouseReleaseEvent(QMouseEvent* event) {
