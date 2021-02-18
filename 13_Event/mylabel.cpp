@@ -38,3 +38,14 @@ void MyLabel::mousePressEvent(QMouseEvent* event) {
 void MyLabel::mouseReleaseEvent(QMouseEvent* event) {
     qDebug() << "鼠标释放了";
 }
+
+bool MyLabel::event(QEvent* e) {
+    if(e->type() == QEvent::MouseButtonPress) {
+        qDebug() << "Event:鼠标按下了";
+        return true;//当return true的时候这个事件就不会再分发下去了
+    }
+
+    //其他事件returnfalse,交给后续事件(父类方法)继续处理
+    QMouseEvent* ev = static_cast<QMouseEvent*>(e);
+    return QLabel::event(ev);
+}

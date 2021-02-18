@@ -3,6 +3,7 @@
 #include <QTimerEvent>
 #include <QDebug>
 #include <QTimer>
+#include <QMouseEvent>
 
 Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
     ui->setupUi(this);
@@ -28,6 +29,14 @@ Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
         timer1->start();
     });
 
+
+    //给mylabel做事件的过滤器拦截(参数this的意义通过父窗口给label安装过滤器)
+    ui->label->installEventFilter(this);
+    //重写自己（窗口）的eventFilter事件
+
+
+
+
 }
 
 Widget::~Widget() {
@@ -42,4 +51,20 @@ void Widget::timerEvent(QTimerEvent* e) {
     } else if(e->timerId() == timerId2) {
         ui->label_timer2->setText(QString::number(++num2));
     }
+}
+
+//重写自己（窗口）的eventFilter事件
+bool Widget::eventFilter(QObject* obj, QEvent* e) {
+    if(obj == ui->label) {
+        if(e->type() == QEvent::MouseButtonPress) {
+            //转换事件类型
+            QMouseEvent* ev = static_cast<QMouseEvent*>(e);
+            QString str = QString("事件过滤器，鼠标按下了，x=%1,y=%2").arg(ev->x()).arg(ev->y());
+            qDebug() << str;
+            return true;
+        }
+    }
+
+    //其他让默认父类方法处理
+    return QWidget::eventFilter(obj, e);
 }

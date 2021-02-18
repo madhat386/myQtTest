@@ -15,6 +15,8 @@ public:
     void mousePressEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
 
+    //事件分发，Event事件
+    bool event(QEvent* e);
 
 signals:
 

@@ -16,12 +16,13 @@ public:
 
 private:
     Ui::Widget* ui;
-
     //定时器时间
     void timerEvent(QTimerEvent* e);
     //定时器的id
     int timerId1;
     int timerId2;
+    bool eventFilter(QObject*, QEvent*);
+
 };
 
 #endif // WIDGET_H
