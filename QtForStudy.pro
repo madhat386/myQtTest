@@ -5,4 +5,5 @@ SUBDIRS += \
     10_Control_TableWidget \
     11_Control_Other \
     12_CustomSmallWidget \
-    13_Event
+    13_Event \
+    14_Painter
