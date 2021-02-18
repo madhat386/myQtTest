@@ -5,9 +5,8 @@
 
 
 MyLabel::MyLabel(QWidget* parent) : QLabel(parent) {
-
-
-
+    //开启鼠标移入自动触发move事件，而无需主动按下任何键
+    this->setMouseTracking(true);
 }
 
 void MyLabel::enterEvent(QEvent* event) {
@@ -20,10 +19,12 @@ void MyLabel::leaveEvent(QEvent* event) {
 
 void MyLabel::mouseMoveEvent(QMouseEvent* event) {
     //只让移动事件在左键按下的时候触发
-    if(event->buttons() & Qt::LeftButton) {
-        QString str = QString("鼠标移动了（按下左键）,x=%1,y=%2").arg(event->x()).arg(event->y());
-        qDebug() << str;
-    }
+//    if(event->buttons() & Qt::LeftButton) {
+//        QString str = QString("鼠标移动了（按下左键）,x=%1,y=%2").arg(event->x()).arg(event->y());
+//        qDebug() << str;
+//    }
+
+    qDebug() << "鼠标移动了";
 }
 
 void MyLabel::mousePressEvent(QMouseEvent* event) {
