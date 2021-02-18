@@ -1,6 +1,8 @@
 #include "mylabel.h"
 #include <QDebug>
 #include <QEvent>
+#include <QMouseEvent>
+
 
 MyLabel::MyLabel(QWidget* parent) : QLabel(parent) {
 
@@ -21,7 +23,8 @@ void MyLabel::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void MyLabel::mousePressEvent(QMouseEvent* event) {
-    qDebug() << "鼠标按下了";
+    QString str = QString("鼠标按下了,x=%1,y=%2").arg(event->x()).arg(event->y());
+    qDebug() << str;
 }
 
 void MyLabel::mouseReleaseEvent(QMouseEvent* event) {
