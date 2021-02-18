@@ -20,6 +20,14 @@ Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
         ui->label_timer3->setText(QString::number(++num));
     });
 
+    //点击按钮暂停定时器
+    connect(ui-> pushButton, &QPushButton::clicked, [ = ]() {
+        timer1->stop();
+    });
+    connect(ui-> pushButton_2, &QPushButton::clicked, [ = ]() {
+        timer1->start();
+    });
+
 }
 
 Widget::~Widget() {
