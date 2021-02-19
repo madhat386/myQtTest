@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QTextStream>
+#include <QDataStream>
 
 Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
     ui->setupUi(this);
@@ -74,7 +75,7 @@ Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
     QFile file("aaa.txt");
     file.open(QFileDevice::WriteOnly);
     QTextStream stream(&file);
-    stream << "hello" << " world";
+    stream << "hello" << " world123456";
     file.close();
 
     //流读操作
@@ -84,7 +85,22 @@ Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
 //    stream >> str;
     str = stream.readAll();
     qDebug() << str;
+    file.close();
 
+    //数据流
+    QFile file2("bbb.txt");
+    file2.open(QFileDevice::WriteOnly);
+    QDataStream dataSteam(&file2);
+    dataSteam << QString("hello world") << 123456;
+    file2.close();
+
+    //读二进制数据流
+    file2.open(QFileDevice::ReadOnly);
+    QString str2;
+    int number;
+    dataSteam >> str2 >> number; //一次右移运算读完一个数据块停止
+    qDebug() << str2 << number;
+    file2.close();
 
 
 
