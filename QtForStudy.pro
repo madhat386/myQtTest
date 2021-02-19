@@ -7,4 +7,5 @@ SUBDIRS += \
     12_CustomSmallWidget \
     13_Event \
     14_Painter \
-    15_QpainterDevice
+    15_QpainterDevice \
+    16_QFile
