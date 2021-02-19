@@ -4,6 +4,8 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QTextCodec>
+#include <QFileInfo>
+#include <QDebug>
 
 Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
     ui->setupUi(this);
@@ -49,6 +51,19 @@ Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
 
             //关闭文件
             file.close();
+
+            //通过QFileInfo读取文件的信息
+            QFileInfo info(filePath);
+            QString str = QString("文件名:%1,文件路径:%2,后缀名:.%3,文件大小%4")
+                          .arg(info.fileName())
+                          .arg(info.filePath())
+                          .arg(info.suffix())
+                          .arg(info.size())
+                          ;
+            qDebug() << str;
+
+
+
 
         }
     });
