@@ -6,6 +6,8 @@
 #include <QTextCodec>
 #include <QFileInfo>
 #include <QDebug>
+#include <QDateTime>
+#include <QTextStream>
 
 Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
     ui->setupUi(this);
@@ -61,12 +63,30 @@ Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
                           .arg(info.size())
                           ;
             qDebug() << str;
-
-
-
-
+            qDebug() << "文件创建时间：" << info.birthTime().toString("yyyy-MM-dd hh:mm::ss");
+            qDebug() << "文件修改时间：" << info.lastModified().toString("yyyy-MM-dd hh:mm::ss");
         }
+
     });
+
+    //文件流（数据流和文本流）的方式读写
+    //文本流
+    QFile file("aaa.txt");
+    file.open(QFileDevice::WriteOnly);
+    QTextStream stream(&file);
+    stream << "hello" << " world";
+    file.close();
+
+    //流读操作
+    file.open(QFileDevice::ReadOnly);
+    QString str;
+    //这种右移操作符读取碰到空格会停止读取
+//    stream >> str;
+    str = stream.readAll();
+    qDebug() << str;
+
+
+
 
 }
 
