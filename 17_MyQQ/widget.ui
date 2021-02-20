@@ -451,15 +451,21 @@ p, li { white-space: pre-wrap; }
             </property>
             <item>
              <widget class="QTableWidget" name="usrTblWidget">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <property name="selectionMode">
                <enum>QAbstractItemView::SingleSelection</enum>
               </property>
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
               </property>
+              <attribute name="horizontalHeaderDefaultSectionSize">
+               <number>179</number>
+              </attribute>
               <column>
                <property name="text">
-                <string>用户名</string>
+                <string>在线用户</string>
                </property>
               </column>
              </widget>
