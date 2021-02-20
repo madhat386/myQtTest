@@ -4,6 +4,10 @@
 #include <QMessageBox>
 #include <QDateTime>
 #include <QComboBox>
+#include <QColorDialog>
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
 
 
 Widget::Widget(QWidget* parent, QString name): QWidget (parent), ui(new Ui::Widget) {
@@ -65,8 +69,36 @@ Widget::Widget(QWidget* parent, QString name): QWidget (parent), ui(new Ui::Widg
         ui->msgTxtEdit->setFontUnderline(checked);
     });
 
+    //字体颜色
+    connect(ui->colorTBtn, &QPushButton::clicked, [ = ]() {
+        QColor color = QColorDialog::getColor(Qt::black);
+        ui->msgTxtEdit->setTextColor(color);
+    });
 
+    //清空聊天记录
+    connect(ui->clearTBtn, &QPushButton::clicked, [ = ]() {
+        ui->msgBrowser->clear();
+    });
 
+    //保存聊天记录
+    connect(ui->saveTBtn, &QPushButton::clicked, [ = ]() {
+        QString path = QFileDialog::getSaveFileName(this, "保存聊天记录", "history", "*.txt");
+        if(path.isEmpty()) {
+            QMessageBox::warning(this, "警告", "未设置正确的保存路径及名称");
+            return ;
+        }
+        if(ui->msgBrowser->document()->isEmpty()) {
+            QMessageBox::warning(this, "警告", "没有可以保存的聊天记录");
+            return ;
+        }
+
+        //开始保存操作
+        QFile file(path);
+        file.open(QIODevice::WriteOnly);
+        QTextStream stream(&file);
+        stream << ui->msgBrowser->toPlainText();//这里只保存纯文本
+        file.close();
+    });
 }
 
 
