@@ -2,6 +2,8 @@
 #include "ui_dialoglist.h"
 #include <QToolButton>
 #include <QVector>
+#include "widget.h"
+
 
 DialogList::DialogList(QWidget* parent) : QWidget(parent), ui(new Ui::DialogList) {
     ui->setupUi(this);
@@ -34,7 +36,17 @@ DialogList::DialogList(QWidget* parent) : QWidget(parent), ui(new Ui::DialogList
         v.push_back(btn);
     }
 
+    //对9个按钮添加信号槽
+    for (int i = 0; i < v.size(); ++i) {
+        connect(v.at(i), &QToolButton::clicked, [ = ]() {
+            //弹出聊天对话框
+            QToolButton* btn = v.at(i);
+            Widget* widget = new Widget(nullptr, btn->text()); //参数nullptr代表以顶层的方式弹出，不依赖于其他窗口
+            widget->setWindowIcon(btn->icon());
+            widget->show();
 
+        });
+    }
 
 
 
