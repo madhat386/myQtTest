@@ -4,19 +4,19 @@
 #include <QWidget>
 
 namespace Ui {
-class DialogList;
+    class DialogList;
 }
 
-class DialogList : public QWidget
-{
+class DialogList : public QWidget {
     Q_OBJECT
 
 public:
-    explicit DialogList(QWidget *parent = nullptr);
+    explicit DialogList(QWidget* parent = nullptr);
     ~DialogList();
 
 private:
-    Ui::DialogList *ui;
+    Ui::DialogList* ui;
+    QVector<bool> isShowV;
 };
 
 #endif // DIALOGLIST_H

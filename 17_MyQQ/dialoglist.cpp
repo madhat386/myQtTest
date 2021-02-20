@@ -1,5 +1,6 @@
 #include "dialoglist.h"
 #include "ui_dialoglist.h"
+#include <QMessageBox>
 #include <QToolButton>
 #include <QVector>
 #include "widget.h"
@@ -24,7 +25,7 @@ DialogList::DialogList(QWidget* parent) : QWidget(parent), ui(new Ui::DialogList
 
     //设置头像
     for (int i = 0; i < 9; ++i) {
-        QToolButton* btn = new QToolButton();
+        QToolButton* btn = new QToolButton(this);
         btn->setText(nameList[i]);
         QPixmap icon = QPixmap(":/images/" + iconNameList[i]);
         btn->setIcon(icon);
@@ -34,17 +35,26 @@ DialogList::DialogList(QWidget* parent) : QWidget(parent), ui(new Ui::DialogList
         //添加进如垂直布局中（page_layout）
         ui->page_layout->addWidget(btn);
         v.push_back(btn);
+        isShowV.push_back(false);
     }
 
     //对9个按钮添加信号槽
     for (int i = 0; i < v.size(); ++i) {
         connect(v.at(i), &QToolButton::clicked, [ = ]() {
-            //弹出聊天对话框
             QToolButton* btn = v.at(i);
+
+            //防止重复打开对话框
+            if(isShowV.at(i)) {
+                QString str = QString("%1的会话框已经打开了，请勿重复打开").arg(btn->text());
+                QMessageBox::warning(this, "警告", str);
+                return;
+            }
+
+            //弹出聊天对话框
             Widget* widget = new Widget(nullptr, btn->text()); //参数nullptr代表以顶层的方式弹出，不依赖于其他窗口
             widget->setWindowIcon(btn->icon());
             widget->show();
-
+            isShowV[i] = true;
         });
     }
 

@@ -11,6 +11,8 @@ Widget::Widget(QWidget* parent, QString name): QWidget (parent), ui(new Ui::Widg
     this->setWindowTitle(name);
 }
 
+
+
 Widget::~Widget() {
     delete ui;
 }
