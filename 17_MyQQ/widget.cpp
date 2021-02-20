@@ -2,6 +2,7 @@
 #include "ui_widget.h"
 #include <QDataStream>
 #include <QMessageBox>
+#include <QDateTime>
 
 //Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
 //    ui->setupUi(this);
@@ -68,7 +69,7 @@ QString Widget::getUsr() {
 }
 
 QString Widget::getMsg() {
-    QString str = QString("收到的消息:%1").arg(ui->msgTxtEdit->toHtml());
+    QString str = ui->msgTxtEdit->toHtml();
     ui->msgTxtEdit->clear();
     ui->msgTxtEdit->setFocus();
     return str;
@@ -84,9 +85,17 @@ void Widget::receiveMessage() {
     QDataStream stream(&array, QIODevice::ReadOnly);
     int msgType;
     stream >> msgType;
+//    MsgType type = static_cast<MsgType>(msgType);
+    QString receiveName;
+    QString receiveMsg;
+    QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
     switch (msgType) {
         case Msg:
-
+            stream >> receiveName >> receiveMsg;
+            //追加来聊天记录
+            ui->msgBrowser->setTextColor(Qt::blue);
+            ui->msgBrowser->append("[" + receiveName  + "]" + time);
+            ui->msgBrowser->append(receiveMsg);
             break;
         case UsrEnter:
 
