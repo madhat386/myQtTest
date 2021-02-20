@@ -8,4 +8,5 @@ SUBDIRS += \
     13_Event \
     14_Painter \
     15_QpainterDevice \
-    16_QFile
+    16_QFile \
+    17_MyQQ
