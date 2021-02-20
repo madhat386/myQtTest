@@ -512,6 +512,9 @@ p, li { white-space: pre-wrap; }
            <property name="text">
             <string>发送</string>
            </property>
+           <property name="shortcut">
+            <string>Ctrl+Return</string>
+           </property>
           </widget>
          </item>
          <item>
@@ -551,6 +554,9 @@ p, li { white-space: pre-wrap; }
           <widget class="QPushButton" name="exitBtn">
            <property name="text">
             <string>退出</string>
+           </property>
+           <property name="shortcut">
+            <string>Ctrl+S</string>
            </property>
           </widget>
          </item>
