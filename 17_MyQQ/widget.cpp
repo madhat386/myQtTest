@@ -5,6 +5,8 @@
 //    ui->setupUi(this);
 //}
 
+
+
 Widget::Widget(QWidget* parent, QString name): QWidget (parent), ui(new Ui::Widget) {
     ui->setupUi(this);
     this->name = name;
