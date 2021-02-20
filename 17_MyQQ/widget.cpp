@@ -3,10 +3,8 @@
 #include <QDataStream>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QComboBox>
 
-//Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
-//    ui->setupUi(this);
-//}
 
 Widget::Widget(QWidget* parent, QString name): QWidget (parent), ui(new Ui::Widget) {
     ui->setupUi(this);
@@ -33,8 +31,43 @@ Widget::Widget(QWidget* parent, QString name): QWidget (parent), ui(new Ui::Widg
         this->close();
     });
 
-}
+    //辅助功能
+    //设置字体
+    connect(ui->fontCbx, &QFontComboBox::currentFontChanged, [ = ](const QFont & font) {
+        ui->msgTxtEdit->setCurrentFont(font);
+        ui->msgTxtEdit->setFocus();
+    });
 
+
+    //设置字号
+    void (QComboBox::*comSignal)(const QString&) = &QComboBox::currentIndexChanged;
+    connect(ui->sizeCbx, comSignal, [ = ](const QString & fontSizeStr) {
+        ui->msgTxtEdit->setFontPointSize(fontSizeStr.toDouble());
+        ui->msgTxtEdit->setFocus();
+    });
+
+    //加粗
+    connect(ui->boldTBtn, &QPushButton::clicked, [ = ](bool checked) {
+        if (checked) {
+            ui->msgTxtEdit->setFontWeight(QFont::Bold);
+        } else {
+            ui->msgTxtEdit->setFontWeight(QFont::Normal);
+        }
+    });
+
+    //倾斜
+    connect(ui->italicTBtn, &QPushButton::clicked, [ = ](bool checked) {
+        ui->msgTxtEdit->setFontItalic(checked);
+    });
+
+    //下划线
+    connect(ui->underlineTBtn, &QPushButton::clicked, [ = ](bool checked) {
+        ui->msgTxtEdit->setFontUnderline(checked);
+    });
+
+
+
+}
 
 
 Widget::~Widget() {
