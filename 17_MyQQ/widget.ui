@@ -556,7 +556,7 @@ p, li { white-space: pre-wrap; }
             <string>退出</string>
            </property>
            <property name="shortcut">
-            <string>Ctrl+S</string>
+            <string>Ctrl+Q</string>
            </property>
           </widget>
          </item>
