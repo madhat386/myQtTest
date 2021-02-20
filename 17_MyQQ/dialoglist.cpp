@@ -1,6 +1,7 @@
 #include "dialoglist.h"
 #include "ui_dialoglist.h"
 #include <QToolButton>
+#include <QVector>
 
 DialogList::DialogList(QWidget* parent) : QWidget(parent), ui(new Ui::DialogList) {
     ui->setupUi(this);
@@ -17,6 +18,8 @@ DialogList::DialogList(QWidget* parent) : QWidget(parent), ui(new Ui::DialogList
     iconNameList << "spqy" << "ymrl" << "qq" << "Cherry" << "dr"
                  << "jj" << "lswh" << "qmnn" << "wy";
 
+    QVector<QToolButton*> v;
+
     //设置头像
     for (int i = 0; i < 9; ++i) {
         QToolButton* btn = new QToolButton();
@@ -28,7 +31,9 @@ DialogList::DialogList(QWidget* parent) : QWidget(parent), ui(new Ui::DialogList
         btn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         //添加进如垂直布局中（page_layout）
         ui->page_layout->addWidget(btn);
+        v.push_back(btn);
     }
+
 
 
 
