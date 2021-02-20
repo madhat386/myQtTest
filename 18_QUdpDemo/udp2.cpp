@@ -1,12 +1,12 @@
-#include "udp1.h"
-#include "ui_udp1.h"
+#include "udp2.h"
+#include "ui_udp2.h"
 
-Udp1::Udp1(QWidget* parent) : QWidget(parent), ui(new Ui::Udp1) {
+Udp2::Udp2(QWidget* parent) : QWidget(parent), ui(new Ui::Udp2) {
     ui->setupUi(this);
 
     //设置默认的端口和ip（可以更改）
-    ui->myPort->setText("8888");
-    ui->toPort->setText("9999");
+    ui->myPort->setText("9999");
+    ui->toPort->setText("8888");
     ui->toIp->setText("127.0.0.1");
 
     //初始化套接字
@@ -31,9 +31,9 @@ Udp1::Udp1(QWidget* parent) : QWidget(parent), ui(new Ui::Udp1) {
         //将数据同步到聊天记录中
         ui->record->append(array);
     });
+
 }
 
-Udp1::~Udp1() {
+Udp2::~Udp2() {
     delete ui;
 }
-
