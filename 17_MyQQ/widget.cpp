@@ -53,7 +53,7 @@ void Widget::sendMsg(Widget::MsgType type) {
             stream << this->getMsg();
             break;
         case UsrEnter:
-
+            stream << "进入了聊天室";
             break;
         case UsrLeft:
 
@@ -62,6 +62,14 @@ void Widget::sendMsg(Widget::MsgType type) {
 
     //书写报文,广播发送(向广播地址发送)
     udp->writeDatagram(array, QHostAddress::Broadcast, this->port);
+}
+
+void Widget::usrEnter(QString username) {
+
+}
+
+void Widget::usrLeft(QString username, QString time) {
+
 }
 
 QString Widget::getUsr() {
@@ -89,6 +97,7 @@ void Widget::receiveMessage() {
     QString receiveName;
     QString receiveMsg;
     QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    bool isEmpty = false;
     switch (msgType) {
         case Msg:
             stream >> receiveName >> receiveMsg;
@@ -98,7 +107,22 @@ void Widget::receiveMessage() {
             ui->msgBrowser->append(receiveMsg);
             break;
         case UsrEnter:
-
+            stream >> receiveName;
+            isEmpty = ui->usrTblWidget->findItems(receiveName, Qt::MatchExactly).isEmpty();
+            if(isEmpty) {
+                //添加上线用户列表
+                QTableWidgetItem* usrItem = new QTableWidgetItem(receiveName);
+                //插入行
+                ui->usrTblWidget->insertRow(0);
+                ui->usrTblWidget->setItem(0, 0, usrItem);
+                //追加聊天记录
+                ui->msgBrowser->setTextColor(Qt::gray);
+                ui->msgBrowser->append("用户:" + receiveName + "上线了");
+                //在线人数更新
+                ui->usrNumLbl->setText(QString("在线用户:%1人").arg(ui->usrTblWidget->rowCount()));
+                //把自身的信息广播出去，告诉别人自己在线
+                sendMsg(UsrEnter);
+            }
             break;
         case UsrLeft:
 
