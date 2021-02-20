@@ -9,4 +9,5 @@ SUBDIRS += \
     14_Painter \
     15_QpainterDevice \
     16_QFile \
-    17_MyQQ
+    17_MyQQ \
+    18_QUdpDemo
