@@ -28,6 +28,11 @@ Widget::Widget(QWidget* parent, QString name): QWidget (parent), ui(new Ui::Widg
     //绑定udp监听事件
     connect(this->udp, &QUdpSocket::readyRead, this, &Widget::receiveMessage);
 
+    //绑定退出按钮事件
+    connect(ui->exitBtn, &QPushButton::clicked, [ = ]() {
+        this->close();
+    });
+
 }
 
 
@@ -56,7 +61,7 @@ void Widget::sendMsg(Widget::MsgType type) {
             stream << "进入了聊天室";
             break;
         case UsrLeft:
-
+            //do nothing special
             break;
     }
 
@@ -64,12 +69,37 @@ void Widget::sendMsg(Widget::MsgType type) {
     udp->writeDatagram(array, QHostAddress::Broadcast, this->port);
 }
 
-void Widget::usrEnter(QString username) {
-
+void Widget::usrEnter(QString receiveName) {
+    bool isEmpty = ui->usrTblWidget->findItems(receiveName, Qt::MatchExactly).isEmpty();
+    //这个判空很重要，否则会陷入死循环
+    if(isEmpty) {
+        //添加上线用户列表
+        QTableWidgetItem* usrItem = new QTableWidgetItem(receiveName);
+        //插入行
+        ui->usrTblWidget->insertRow(0);
+        ui->usrTblWidget->setItem(0, 0, usrItem);
+        //追加聊天记录
+        ui->msgBrowser->setTextColor(Qt::gray);
+        ui->msgBrowser->append("用户:" + receiveName + "上线了");
+        //在线人数更新
+        ui->usrNumLbl->setText(QString("在线用户:%1人").arg(ui->usrTblWidget->rowCount()));
+        //把自身的信息广播出去，告诉别人自己在线
+        sendMsg(UsrEnter);
+    }
 }
 
-void Widget::usrLeft(QString username, QString time) {
-
+void Widget::usrLeft(QString receiveName, QString time) {
+    //处理有用户离开的事件
+    QList<QTableWidgetItem*> items = ui->usrTblWidget->findItems(receiveName, Qt::MatchExactly);
+    bool isEmpty = items.isEmpty();
+    if(!isEmpty) {
+        //如果当前用户在线
+        int row = items.first()->row();
+        ui->usrTblWidget->removeRow(row);
+    }
+    ui->msgBrowser->setTextColor(Qt::gray);
+    ui->msgBrowser->append(QString("%1于%2离开").arg(receiveName).arg(time));
+    ui->usrNumLbl->setText(QString("在线用户:%1人").arg(ui->usrTblWidget->rowCount()));
 }
 
 QString Widget::getUsr() {
@@ -97,35 +127,20 @@ void Widget::receiveMessage() {
     QString receiveName;
     QString receiveMsg;
     QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-    bool isEmpty = false;
+    stream >> receiveName;
     switch (msgType) {
         case Msg:
-            stream >> receiveName >> receiveMsg;
+            stream >> receiveMsg;
             //追加来聊天记录
             ui->msgBrowser->setTextColor(Qt::blue);
             ui->msgBrowser->append("[" + receiveName  + "]" + time);
             ui->msgBrowser->append(receiveMsg);
             break;
         case UsrEnter:
-            stream >> receiveName;
-            isEmpty = ui->usrTblWidget->findItems(receiveName, Qt::MatchExactly).isEmpty();
-            if(isEmpty) {
-                //添加上线用户列表
-                QTableWidgetItem* usrItem = new QTableWidgetItem(receiveName);
-                //插入行
-                ui->usrTblWidget->insertRow(0);
-                ui->usrTblWidget->setItem(0, 0, usrItem);
-                //追加聊天记录
-                ui->msgBrowser->setTextColor(Qt::gray);
-                ui->msgBrowser->append("用户:" + receiveName + "上线了");
-                //在线人数更新
-                ui->usrNumLbl->setText(QString("在线用户:%1人").arg(ui->usrTblWidget->rowCount()));
-                //把自身的信息广播出去，告诉别人自己在线
-                sendMsg(UsrEnter);
-            }
+            this->usrEnter(receiveName);
             break;
         case UsrLeft:
-
+            this->usrLeft(receiveName, time);
             break;
     }
 
@@ -134,4 +149,10 @@ void Widget::receiveMessage() {
 
 void Widget::closeEvent(QCloseEvent* e) {
     emit this->closeWidget();
+    //发送用户离开事件
+    sendMsg(UsrLeft);
+    //断开套接字
+    this->udp->close();
+    this->udp->destroyed();
+    QWidget::closeEvent(e);
 }
