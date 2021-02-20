@@ -3,7 +3,9 @@
         <file>images/bold.png</file>
         <file>images/Cherry.png</file>
         <file>images/clear.png</file>
+        <file>images/color.png</file>
         <file>images/dr.png</file>
+        <file>images/ftbz.png</file>
         <file>images/italic.png</file>
         <file>images/jj.png</file>
         <file>images/lswh.png</file>
@@ -12,6 +14,7 @@
         <file>images/save.png</file>
         <file>images/spqy.png</file>
         <file>images/under.png</file>
+        <file>images/wy.png</file>
         <file>images/ymrl.png</file>
     </qresource>
 </RCC>
