@@ -16,3 +16,7 @@ Widget::Widget(QWidget* parent, QString name): QWidget (parent), ui(new Ui::Widg
 Widget::~Widget() {
     delete ui;
 }
+
+void Widget::closeEvent(QCloseEvent* e) {
+    emit this->closeWidget();
+}

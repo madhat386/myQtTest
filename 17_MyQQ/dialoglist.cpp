@@ -55,6 +55,11 @@ DialogList::DialogList(QWidget* parent) : QWidget(parent), ui(new Ui::DialogList
             widget->setWindowIcon(btn->icon());
             widget->show();
             isShowV[i] = true;
+
+            //接收已经打开窗口的关闭信号，并将对应的窗口状态设置为false
+            connect(widget, &Widget::closeWidget, [ = ]() {
+                this->isShowV[i] = false;
+            });
         });
     }
 
