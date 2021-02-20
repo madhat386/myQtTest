@@ -94,7 +94,8 @@ Widget::Widget(QWidget* parent, QString name): QWidget (parent), ui(new Ui::Widg
 
         //开始保存操作
         QFile file(path);
-        file.open(QIODevice::WriteOnly);
+        //打开模式加上换行操作QIODevice::Text
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream stream(&file);
         stream << ui->msgBrowser->toPlainText();//这里只保存纯文本
         file.close();
