@@ -31,15 +31,19 @@ signals:
 //关闭窗口发送信号
     void closeWidget();
 
+
+private slots:
+    void receiveMessage();
+
 private:
     Ui::Widget* ui;
     QUdpSocket* udp;
     QString name;//用户名
-    qint16 port;//端口
+    quint16 port;//端口
 
     //重写关闭事件
     void closeEvent(QCloseEvent*);
-    void receiveMessage();
+
 };
 
 
